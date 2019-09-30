@@ -24,7 +24,15 @@ def parse(filepath):
 
 		if matched:
 
-			parsed_data += matched.group(0)
+			symbol = matched.group(0)
+
+			if symbol == 'ё':
+				symbol = 'е'
+
+			if symbol == 'ъ':
+				symbol = 'ь'
+
+			parsed_data += symbol
 
 	parsed_data = ' '.join(parsed_data.split())		# Substitute whitespace characters after filtering
 
