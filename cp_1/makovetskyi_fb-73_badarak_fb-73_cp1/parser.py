@@ -10,7 +10,7 @@ def parse(filepath):
 	parsed_file_path = os.path.splitext(filepath)[0] + '_parsed.txt'
 
 
-	with open(filepath, 'r', encoding="utf8") as start_file:
+	with open(filepath, 'r', encoding='utf8') as start_file:
 
 		raw_data = start_file.read()
 	
@@ -20,7 +20,7 @@ def parse(filepath):
 	for symbol in raw_data:
 
 		symbol = symbol.lower()
-		matched = re.match(r'^[а-я0-9 ]$', symbol) 	# Only keep russian symbols and numbers
+		matched = re.match(r'^[а-я]$', symbol) 		# Only keep russian symbols
 
 		if matched:
 
@@ -37,7 +37,7 @@ def parse(filepath):
 	parsed_data = ' '.join(parsed_data.split())		# Substitute whitespace characters after filtering
 
 
-	with open(parsed_file_path, 'w', encoding="utf8") as parsed_file:
+	with open(parsed_file_path, 'w', encoding='utf8') as parsed_file:
 
 		parsed_file.write(parsed_data)
 
