@@ -1,4 +1,14 @@
 import sys
+import math
+
+
+
+'''
+а б в г д е ж з и й к л м н о п р с т у ф х ц ч ш щ в ь э ю я
+
+31
+'''
+
 
 
 def import_data(filepath):
@@ -8,8 +18,15 @@ def import_data(filepath):
 		return data_source.read()
 
 
-def calculate_freq_letters(text): # TODO: calcularw frequency, not quantity
+def freq_by_number(numbers_dict, text_length):
 
+	for key in numbers_dict.keys():
+		numbers_dict[key] = numbers_dict[key] / text_length
+
+	return numbers_dict
+
+
+def calculate_freq_letters(text):
 	freq = {}
 
 	for letter in text:
@@ -18,10 +35,10 @@ def calculate_freq_letters(text): # TODO: calcularw frequency, not quantity
 		else:
 			freq[letter] = 1
 
-	return freq
+	return freq_by_number(freq, len(text))
 
 
-def calculate_freq_bigrams(text): # TODO: calcularw frequency, not quantity
+def calculate_freq_bigrams(text):
 
 	freq = {}
 
@@ -32,22 +49,28 @@ def calculate_freq_bigrams(text): # TODO: calcularw frequency, not quantity
 		else:
 			freq[bigram] = 1
 
-	return freq
+	return freq_by_number(freq, len(text))
 
 
+def calculate_entropy(freq_dict):
 
-def calculate_entropy():
+	entropy = 0
+	for i in freq_dict.values():
+		entropy += i * math.log(i, 2)
 
-	pass
-
-
-def calculate_redundancy():
-
-	pass
+	return -entropy
 
 
+def print_frequencies(freq):
 
-def remove_spaces(text):
+	sum = 0
+	for key, value in sorted(freq.items()):
+		print(key, '\t', value)
+		sum += value
+	print(sum)
+
+
+def data_remove_spaces(text):
 
 	return ''.join([letter for letter in text if letter != ' '])
 
@@ -62,17 +85,36 @@ def main():
 	data = import_data(filepath)
 
 
+	#
+	# Text with spaces
+	#
+
 	freq_letters = calculate_freq_letters(data)
-
-	print(freq_letters)
-
 	freq_bigrams = calculate_freq_bigrams(data)
 
-	print(freq_bigrams)
+	print_frequencies(freq_letters)
+	#print_frequencies(freq_bigrams)
 
-	no_space_text = remove_spaces(data)
+	entropy_letters = calculate_entropy(freq_letters)
+	entropy_bigrams = calculate_entropy(freq_bigrams)
+	print(entropy_letters, entropy_bigrams)
 
-	print(no_space_text)
+
+	# 
+	# Text without spaces
+	#
+
+	no_space_text = data_remove_spaces(data)
+
+	freq_letters_nospace = calculate_freq_letters(no_space_text)
+	freq_bigrams_nospace = calculate_freq_bigrams(no_space_text)
+
+	print_frequencies(freq_letters_nospace)
+	#print_frequencies(freq_bigrams_nospace)
+
+	entropy_letters_nospace = calculate_entropy(freq_letters_nospace)
+	entropy_bigrams_nospace = calculate_entropy(freq_bigrams_nospace)
+	print(entropy_letters_nospace, entropy_bigrams_nospace)
 
 
 
