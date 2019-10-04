@@ -1,5 +1,5 @@
-import sys
-import math
+import re
+from math import log
 
 
 
@@ -37,7 +37,6 @@ def calculate_freq_letters(text):
 
 	return freq_by_number(freq, len(text))
 
-
 def calculate_freq_bigrams(text):
 
 	freq = {}
@@ -56,7 +55,7 @@ def calculate_entropy(freq_dict):
 
 	entropy = 0
 	for i in freq_dict.values():
-		entropy += i * math.log(i, 2)
+		entropy += i * log(i, 2)
 
 	return -entropy
 
@@ -70,9 +69,67 @@ def print_frequencies(freq):
 	print(sum)
 
 
+def create_results_file(freq_letters, freq_bigrams,
+						entropy_letters, entropy_bigrams,
+						freq_letters_ns, freq_bigrams_ns,
+						entropy_letters_ns, entropy_bigrams_ns):
+
+
+	res_file = open('lab1_results.txt', 'w+', encoding='utf-8')
+
+
+	res_file.write('Letters entropy with spaces: {}\n'.format(entropy_letters))
+	res_file.write('Letters entropy without spaces: {}\n\n'.format(entropy_letters_ns))
+	res_file.write('Bigrams entropy with spaces: {}\n'.format(entropy_bigrams))
+	res_file.write('Bigrams entropy without spaces: {}\n\n'.format(entropy_bigrams_ns))
+	res_file.write('Frequency tables for all experiments are listed below.\n\n')
+
+	res_file.write('|-----------------------------------------------|\n')
+	res_file.write('|                    LETTERS                    |\n')
+	res_file.write('|-----------------------------------------------|\n')
+	res_file.write('|FREQUENCIES WITH SPACES|  FREQ WITHOUT SPACES  |\n')
+	res_file.write('|-----------------------|-----------------------|\n')
+	res_file.write('| ' + '_' + '     | ' + '{:.10f}'.format(freq_letters['_']) + '  |'
+		  + '  SPACES ARE REMOVED   |\n')
+	res_file.write('|-------|---------------|-----------------------|\n')
+
+	for key, value in sorted(freq_letters.items()):
+		if key != '_':
+			res_file.write('| ' + key + '     | ' + '{:.10f}'.format(value) + '  | '
+				  + key + '     | ' + '{:.10f}'.format(freq_letters_ns[key]) + '  |\n')
+			res_file.write('|-------|---------------|-------|---------------|\n')
+		
+
+	res_file.write('|-----------------------------------------------|\n')
+	res_file.write('|-----------------------------------------------|\n')
+	res_file.write('|                    BIGRAMS                    |\n')
+	res_file.write('|-----------------------------------------------|\n')
+	res_file.write('|FREQUENCIES WITH SPACES|  FREQ WITHOUT SPACES  |\n')
+	res_file.write('|-----------------------|-----------------------|\n')
+	
+	for key, value in sorted(freq_bigrams.items()):
+		if '_' not in key:
+			res_file.write('| ' + key + '    | ' + '{:.10f}'.format(value) + '  | '
+				  + key + '    | ' + '{:.10f}'.format(freq_bigrams_ns[key]) + '  |\n')
+			res_file.write('|-------|---------------|-------|---------------|\n')
+		else:
+			res_file.write('| ' + key + '    | ' + '{:.10f}'.format(value) + '  | '
+				  + ' SPACES ARE REMOVED   |\n')
+			res_file.write('|-------|---------------|-------|---------------|\n')
+
+
+	print('file written')
+	
+
+
+
+
+
+
 def data_remove_spaces(text):
 
 	return ''.join([letter for letter in text if letter != ' '])
+
 
 
 
@@ -89,14 +146,17 @@ def main():
 	# Text with spaces
 	#
 
-	freq_letters = calculate_freq_letters(data)
-	freq_bigrams = calculate_freq_bigrams(data)
+	replaced_spaces_text = re.sub(' ', '_', data) # Replace spaces for better readability 
 
-	print_frequencies(freq_letters)
+	freq_letters = calculate_freq_letters(replaced_spaces_text)
+	freq_bigrams = calculate_freq_bigrams(replaced_spaces_text)
+
+	#print_frequencies(freq_letters)
 	#print_frequencies(freq_bigrams)
 
 	entropy_letters = calculate_entropy(freq_letters)
 	entropy_bigrams = calculate_entropy(freq_bigrams)
+
 	print(entropy_letters, entropy_bigrams)
 
 
@@ -109,12 +169,17 @@ def main():
 	freq_letters_nospace = calculate_freq_letters(no_space_text)
 	freq_bigrams_nospace = calculate_freq_bigrams(no_space_text)
 
-	print_frequencies(freq_letters_nospace)
+	#print_frequencies(freq_letters_nospace)
 	#print_frequencies(freq_bigrams_nospace)
 
 	entropy_letters_nospace = calculate_entropy(freq_letters_nospace)
 	entropy_bigrams_nospace = calculate_entropy(freq_bigrams_nospace)
 	print(entropy_letters_nospace, entropy_bigrams_nospace)
+
+	create_results_file(freq_letters, freq_bigrams,
+						entropy_letters, entropy_bigrams,
+						freq_letters_nospace, freq_bigrams_nospace,
+						entropy_letters_nospace, entropy_bigrams_nospace)
 
 
 
