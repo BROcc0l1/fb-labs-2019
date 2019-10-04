@@ -14,7 +14,6 @@ from math import log
 def import_data(filepath):
 
 	with open(filepath, 'r', encoding='utf-8') as data_source:
-
 		return data_source.read()
 
 
@@ -27,6 +26,7 @@ def freq_by_number(numbers_dict, text_length):
 
 
 def calculate_freq_letters(text):
+
 	freq = {}
 
 	for letter in text:
@@ -36,6 +36,7 @@ def calculate_freq_letters(text):
 			freq[letter] = 1
 
 	return freq_by_number(freq, len(text))
+
 
 def calculate_freq_bigrams(text):
 
@@ -70,13 +71,11 @@ def print_frequencies(freq):
 
 
 def create_results_file(freq_letters, freq_bigrams,
-						entropy_letters, entropy_bigrams,
-						freq_letters_ns, freq_bigrams_ns,
-						entropy_letters_ns, entropy_bigrams_ns):
-
+                        entropy_letters, entropy_bigrams,
+                        freq_letters_ns, freq_bigrams_ns,
+                        entropy_letters_ns, entropy_bigrams_ns):
 
 	res_file = open('lab1_results.txt', 'w+', encoding='utf-8')
-
 
 	res_file.write('Letters entropy with spaces: {}\n'.format(entropy_letters))
 	res_file.write('Letters entropy without spaces: {}\n\n'.format(entropy_letters_ns))
@@ -99,7 +98,6 @@ def create_results_file(freq_letters, freq_bigrams,
 				  + key + '     | ' + '{:.10f}'.format(freq_letters_ns[key]) + '  |\n')
 			res_file.write('|-------|---------------|-------|---------------|\n')
 		
-
 	res_file.write('|-----------------------------------------------|\n')
 	res_file.write('|-----------------------------------------------|\n')
 	res_file.write('|                    BIGRAMS                    |\n')
@@ -130,7 +128,6 @@ def main():
 
 
 	filepath = 'text_parsed.txt'
-
 
 	data = import_data(filepath)
 
@@ -167,13 +164,13 @@ def main():
 
 	entropy_letters_nospace = calculate_entropy(freq_letters_nospace)
 	entropy_bigrams_nospace = calculate_entropy(freq_bigrams_nospace)
-	
+
 	#print(entropy_letters_nospace, entropy_bigrams_nospace)
 
 	create_results_file(freq_letters, freq_bigrams,
-						entropy_letters, entropy_bigrams,
-						freq_letters_nospace, freq_bigrams_nospace,
-						entropy_letters_nospace, entropy_bigrams_nospace)
+                        entropy_letters, entropy_bigrams,
+                        freq_letters_nospace, freq_bigrams_nospace,
+                        entropy_letters_nospace, entropy_bigrams_nospace)
 
 
 
