@@ -117,19 +117,12 @@ def create_results_file(freq_letters, freq_bigrams,
 				  + ' SPACES ARE REMOVED   |\n')
 			res_file.write('|-------|---------------|-------|---------------|\n')
 
-
-	print('file written')
-	
-
-
-
-
+	res_file.close()
 
 
 def data_remove_spaces(text):
 
 	return ''.join([letter for letter in text if letter != ' '])
-
 
 
 
@@ -157,7 +150,7 @@ def main():
 	entropy_letters = calculate_entropy(freq_letters)
 	entropy_bigrams = calculate_entropy(freq_bigrams)
 
-	print(entropy_letters, entropy_bigrams)
+	#print(entropy_letters, entropy_bigrams)
 
 
 	# 
@@ -174,7 +167,8 @@ def main():
 
 	entropy_letters_nospace = calculate_entropy(freq_letters_nospace)
 	entropy_bigrams_nospace = calculate_entropy(freq_bigrams_nospace)
-	print(entropy_letters_nospace, entropy_bigrams_nospace)
+	
+	#print(entropy_letters_nospace, entropy_bigrams_nospace)
 
 	create_results_file(freq_letters, freq_bigrams,
 						entropy_letters, entropy_bigrams,
