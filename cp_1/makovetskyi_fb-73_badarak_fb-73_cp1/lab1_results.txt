@@ -1,8 +1,8 @@
 Letters entropy with spaces: 4.363885193043505
 Letters entropy without spaces: 4.45646766252117
 
-Bigrams entropy with spaces: 7.9038768971118705
-Bigrams entropy without spaces: 8.270837200168474
+Bigrams entropy with spaces: 3.9519384485559352
+Bigrams entropy without spaces: 4.135418600084237
 
 Frequency tables for all experiments are listed below.
 
