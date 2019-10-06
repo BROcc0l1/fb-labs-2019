@@ -17,7 +17,7 @@ def import_data(filepath):
 		return data_source.read()
 
 
-def freq_by_number(numbers_dict, text_length):
+def freq_by_quantity(numbers_dict, text_length):
 
 	for key in numbers_dict.keys():
 		numbers_dict[key] = numbers_dict[key] / text_length
@@ -40,7 +40,7 @@ def calculate_freq_ngrams(text, ngram_len=1, step=1):
 		else:
 			freq[ngram] = 1
 
-	return freq_by_number(freq, len(text))
+	return freq_by_quantity(freq, len(text))
 
 
 def calculate_entropy(freq_dict, ngram_len=1):
@@ -171,8 +171,6 @@ def main():
                         freq_letters_nospace, freq_bigrams_nospace,
                         entropy_letters_nospace, entropy_bigrams_nospace)
 
-	print(len(replaced_spaces_text))
-
-
+	
 
 main()
