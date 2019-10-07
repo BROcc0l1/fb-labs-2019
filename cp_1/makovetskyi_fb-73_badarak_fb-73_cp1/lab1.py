@@ -2,7 +2,6 @@ import re
 from math import log
 
 
-
 '''
 а б в г д е ж з и й к л м н о п р с т у ф х ц ч ш щ ы ь э ю я
 
@@ -139,6 +138,23 @@ def create_results_file(freq_letters, freq_bigrams, freq_bigrams_step_2,
 	res_file.close()
 
 
+def create_freq_csv(freq_letters, freq_bigrams, freq_bigrams_step_2,
+                    freq_letters_ns, freq_bigrams_ns, freq_bigrams_step_2_ns):
+
+	with open('frequencies.csv', 'w+') as freq_file:
+
+		item_counter = 0
+		for key, value in sorted(freq_bigrams_step_2_ns.items()): # Choose needed
+
+			if item_counter == 7:
+				freq_file.write('\n')
+				item_counter = 0
+			
+			freq_file.write('{},{},'.format(key, value))
+			item_counter += 1
+		freq_file.write('\n')
+
+
 def data_remove_spaces(text):
 
 	return ''.join([letter for letter in text if letter != ' '])
@@ -165,7 +181,7 @@ def main():
 
 	#print_frequencies(freq_letters)
 	#print_frequencies(freq_bigrams)
-	print_frequencies(freq_bigrams_step_2)
+	#print_frequencies(freq_bigrams_step_2)
 
 	entropy_letters = calculate_entropy(freq_letters)
 	entropy_bigrams = calculate_entropy(freq_bigrams, 2)
@@ -199,6 +215,8 @@ def main():
                         freq_letters_nospace, freq_bigrams_nospace, freq_bigrams_step_2_nospace,
                         entropy_letters_nospace, entropy_bigrams_nospace, entropy_bigrams_step_2_nospace)
 
+	create_freq_csv(freq_letters, freq_bigrams, freq_bigrams_step_2,
+                    freq_letters_nospace, freq_bigrams_nospace, freq_bigrams_step_2_nospace)
 	
 
 main()
