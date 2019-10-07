@@ -51,7 +51,7 @@ def calculate_entropy(freq_dict, ngram_len=1):
 
 def calculate_redundancy(entropy):
 
-	pass
+	return 1 - (entropy / log(33, 2))
 
 
 def print_frequencies(freq):
@@ -65,17 +65,20 @@ def print_frequencies(freq):
 
 def create_results_file(freq_letters, freq_bigrams, freq_bigrams_step_2,
                         entropy_letters, entropy_bigrams, entropy_bigrams_step_2,
+                        redundancy_letters, redundancy_bigrams, redundancy_bigrams_step_2,
                         freq_letters_ns, freq_bigrams_ns, freq_bigrams_step_2_ns,
-                        entropy_letters_ns, entropy_bigrams_ns, entropy_bigrams_step_2_ns):
+                        entropy_letters_ns, entropy_bigrams_ns, entropy_bigrams_step_2_ns,
+                        redundancy_letters_nospace, redundancy_bigrams_nospace, redundancy_bigrams_step_2_nospace):
 
 	res_file = open('lab1_results.txt', 'w+', encoding='utf-8')
 
-	res_file.write('Letters entropy with spaces: {}\n'.format(entropy_letters))
-	res_file.write('Letters entropy without spaces: {}\n\n'.format(entropy_letters_ns))
-	res_file.write('Bigrams (step = 1) entropy with spaces: {}\n'.format(entropy_bigrams))
-	res_file.write('Bigrams (step = 1) entropy without spaces: {}\n\n'.format(entropy_bigrams_ns))
-	res_file.write('Bigrams (step = 2) entropy with spaces: {}\n'.format(entropy_bigrams_step_2))
-	res_file.write('Bigrams (step = 2) entropy without spaces: {}\n\n'.format(entropy_bigrams_step_2_ns))
+	res_file.write('Letters with spaces:\n\tEntropy: {}\n\tRedundancy: {}\n\n'.format(entropy_letters, redundancy_letters))
+	res_file.write('Letters without spaces:\n\tEntropy: {}\n\tRedundancy: {}\n\n'.format(entropy_letters_ns, redundancy_letters_nospace))
+	res_file.write('Bigrams (step = 1) with spaces:\n\tEntropy: {}\n\tRedundancy: {}\n\n'.format(entropy_bigrams, redundancy_bigrams))
+	res_file.write('Bigrams (step = 1) without spaces:\n\tEntropy: {}\n\tRedundancy: {}\n\n'.format(entropy_bigrams_ns, redundancy_bigrams_nospace))
+	res_file.write('Bigrams (step = 2) with spaces:\n\tEntropy: {}\n\tRedundancy: {}\n\n'.format(entropy_bigrams_step_2, redundancy_bigrams_step_2))
+	res_file.write('Bigrams (step = 2) without spaces:\n\tEntropy: {}\n\tRedundancy: {}\n\n'.format(entropy_bigrams_step_2_ns, redundancy_bigrams_step_2_nospace))
+
 	res_file.write('Frequency tables for all experiments are listed below.\n\n')
 
 	res_file.write('|-----------------------------------------------|\n')
@@ -189,6 +192,13 @@ def main():
 
 	#print(entropy_letters, entropy_bigrams)
 
+	redundancy_letters = calculate_redundancy(entropy_letters)
+	redundancy_bigrams = calculate_redundancy(entropy_bigrams)
+	redundancy_bigrams_step_2 = calculate_redundancy(entropy_bigrams)
+
+	#print(redundancy_letters)
+	#print(redundancy_bigrams)
+	#print(redundancy_bigrams_step_2)
 
 	# 
 	# Text without spaces
@@ -210,13 +220,24 @@ def main():
 
 	#print(entropy_letters_nospace, entropy_bigrams_nospace)
 
+	redundancy_letters_nospace = calculate_redundancy(entropy_letters_nospace)
+	redundancy_bigrams_nospace = calculate_redundancy(entropy_bigrams_nospace)
+	redundancy_bigrams_step_2_nospace = calculate_redundancy(entropy_bigrams_step_2_nospace)
+
+	#print(redundancy_letters_nospace)
+	#print(redundancy_bigrams_nospace)
+	#print(redundancy_bigrams_step_2_nospace)
+
+
 	create_results_file(freq_letters, freq_bigrams, freq_bigrams_step_2,
                         entropy_letters, entropy_bigrams, entropy_bigrams_step_2,
+                        redundancy_letters, redundancy_bigrams, redundancy_bigrams_step_2,
                         freq_letters_nospace, freq_bigrams_nospace, freq_bigrams_step_2_nospace,
-                        entropy_letters_nospace, entropy_bigrams_nospace, entropy_bigrams_step_2_nospace)
+                        entropy_letters_nospace, entropy_bigrams_nospace, entropy_bigrams_step_2_nospace,
+                        redundancy_letters_nospace, redundancy_bigrams_nospace, redundancy_bigrams_step_2_nospace)
 
-	create_freq_csv(freq_letters, freq_bigrams, freq_bigrams_step_2,
-                    freq_letters_nospace, freq_bigrams_nospace, freq_bigrams_step_2_nospace)
+	#create_freq_csv(freq_letters, freq_bigrams, freq_bigrams_step_2,
+    #                freq_letters_nospace, freq_bigrams_nospace, freq_bigrams_step_2_nospace)
 	
 
 main()

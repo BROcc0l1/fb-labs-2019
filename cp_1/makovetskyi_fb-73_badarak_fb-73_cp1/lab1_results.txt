@@ -1,11 +1,26 @@
-Letters entropy with spaces: 4.363885193043505
-Letters entropy without spaces: 4.45646766252117
+Letters with spaces:
+	Entropy: 4.363885193043505
+	Redundancy: 0.1349039964390204
 
-Bigrams (step = 1) entropy with spaces: 3.9519384485559352
-Bigrams (step = 1) entropy without spaces: 4.135418600084237
+Letters without spaces:
+	Entropy: 4.45646766252117
+	Redundancy: 0.1165504603577755
 
-Bigrams (step = 2) entropy with spaces: 3.9506476208696535
-Bigrams (step = 2) entropy without spaces: 4.13484307316223
+Bigrams (step = 1) with spaces:
+	Entropy: 3.9519384485559352
+	Redundancy: 0.21656826269979412
+
+Bigrams (step = 1) without spaces:
+	Entropy: 4.135418600084237
+	Redundancy: 0.18019518256630984
+
+Bigrams (step = 2) with spaces:
+	Entropy: 3.9506476208696535
+	Redundancy: 0.21656826269979412
+
+Bigrams (step = 2) without spaces:
+	Entropy: 4.13484307316223
+	Redundancy: 0.1803092749445795
 
 Frequency tables for all experiments are listed below.
 
