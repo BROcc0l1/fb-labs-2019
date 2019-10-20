@@ -1,7 +1,7 @@
 import os
 import re
 
-def parse(filepath):
+def parse(filepath, with_spases):
 
 
 	raw_data = ''
@@ -14,8 +14,8 @@ def parse(filepath):
 
 		raw_data = start_file.read()
 	
-
-	raw_data = ' '.join(raw_data.split())			# Substitute whitespace characters with spaces
+	if with_spases:
+		raw_data = ' '.join(raw_data.split())			# Substitute whitespace characters with spaces
 
 	for symbol in raw_data:
 
@@ -34,7 +34,8 @@ def parse(filepath):
 
 			parsed_data += symbol
 
-	parsed_data = ' '.join(parsed_data.split())		# Substitute whitespace characters after filtering
+	if with_spases:
+		parsed_data = ' '.join(parsed_data.split())		# Substitute whitespace characters after filtering
 
 
 	with open(parsed_file_path, 'w', encoding='utf8') as parsed_file:
