@@ -20,7 +20,7 @@ def parse(filepath):
 	for symbol in raw_data:
 
 		symbol = symbol.lower()
-		matched = re.match(r'^[а-я]$', symbol) 		# Only keep russian symbols
+		matched = re.match(r'^[а-я ]$', symbol)		# Only keep russian symbols and spaces
 
 		if matched:
 
