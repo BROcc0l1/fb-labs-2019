@@ -1,7 +1,8 @@
 import os
 import re
+import sys
 
-def parse(filepath, with_spases):
+def parse(filepath, keep_spaces=False):
 
 
 	raw_data = ''
@@ -20,7 +21,10 @@ def parse(filepath, with_spases):
 	for symbol in raw_data:
 
 		symbol = symbol.lower()
-		matched = re.match(r'^[а-я]$', symbol) 		# Only keep russian symbols
+		if keep_spaces:
+			matched = re.match(r'^[а-я ]$', symbol) 	# Only keep russian symbols and spaces
+		else:
+			matched = re.match(r'^[а-я]$', symbol)		# Only keep russian symblos
 
 		if matched:
 
@@ -43,8 +47,21 @@ def parse(filepath, with_spases):
 		parsed_file.write(parsed_data)
 
 
-	print('Text parsed to \'' + parsed_file_path + '\'')	
+	print('Data parsed to \'' + parsed_file_path + '\'')	
 
 
 
-parse('text.txt')
+def main():
+
+	filepath = sys.argv[1]
+	keep_spaces = False
+
+	
+	if len(sys.argv) > 2:
+		if sys.argv[2] == '-ks':
+			keep_spaces = True
+	
+
+	parse(filepath, keep_spaces)
+        
+main()
