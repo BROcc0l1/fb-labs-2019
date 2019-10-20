@@ -2,7 +2,7 @@ import os
 import re
 import sys
 
-def parse(filepath):
+def parse(filepath, keep_spaces=False):
 
 
 	raw_data = ''
@@ -63,6 +63,5 @@ def main():
 	
 
 	parse(filepath, keep_spaces)
-
-
+        
 main()
