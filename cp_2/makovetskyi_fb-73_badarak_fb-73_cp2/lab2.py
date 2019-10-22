@@ -55,10 +55,26 @@ def vigenere_encrypt_lab(filepath, keys, alphabet_dict):
 		output_file_path = os.path.splitext(filepath)[0] + '_encrypted_keylen_' + str(key) + '.txt'
 
 		with open(output_file_path, 'w', encoding='utf-8') as output_file:
-			
+
 			output_file.write(vigenere_encrypt(plaintext, keys[key], alphabet_dict))
 			
 			
+def calculate_index_of_coinsidence(text, alphabet_dict):
+
+	n = len(text)
+	res = 0
+	letters_count = {}
+
+	for letter in text:
+		if letter in letters_count:
+			letters_count[letter] += 1
+		else:
+			letters_count[letter] = 1
+
+	for letter in letters_count:
+		res += letters_count[letter] * (letters_count[letter] - 1)
+
+	return res / (n * (n - 1))
 
 
 
@@ -70,12 +86,27 @@ def main():
 
 	plaintext = import_data('TEXT_parsed.txt')
 
-	#print(plaintext)
+	# vigenere_encrypt_lab('TEXT_parsed.txt', KEYS_DICT, ALPHABET_DICT)	
 
-	#print(vigenere_encrypt('броварысело', 'город', ALPHABET_DICT))
-	#print(vigenere_encrypt(plaintext, KEYS_DICT[4], ALPHABET_DICT))
+	ciphertext_2 = import_data('TEXT_parsed_encrypted_keylen_2.txt')
+	ciphertext_3 = import_data('TEXT_parsed_encrypted_keylen_3.txt')
+	ciphertext_4 = import_data('TEXT_parsed_encrypted_keylen_4.txt')
+	ciphertext_5 = import_data('TEXT_parsed_encrypted_keylen_5.txt')
+	ciphertext_12 = import_data('TEXT_parsed_encrypted_keylen_12.txt')
 
-	vigenere_encrypt_lab('TEXT_parsed.txt', KEYS_DICT, ALPHABET_DICT)	
+	plaintext_IC = calculate_index_of_coinsidence(plaintext, ALPHABET_DICT)
+	ciphertext_2_IC = calculate_index_of_coinsidence(ciphertext_2, ALPHABET_DICT)
+	ciphertext_3_IC = calculate_index_of_coinsidence(ciphertext_3, ALPHABET_DICT)
+	ciphertext_4_IC = calculate_index_of_coinsidence(ciphertext_4, ALPHABET_DICT)
+	ciphertext_5_IC = calculate_index_of_coinsidence(ciphertext_5, ALPHABET_DICT)
+	ciphertext_12_IC = calculate_index_of_coinsidence(ciphertext_12, ALPHABET_DICT)
+
+	print('{}\n{}\n{}\n{}\n{}\n{}\n'.format(
+		plaintext_IC, ciphertext_2_IC, ciphertext_3_IC,
+		ciphertext_4_IC, ciphertext_5_IC, ciphertext_12_IC))
+
+
+	
 
 
 
