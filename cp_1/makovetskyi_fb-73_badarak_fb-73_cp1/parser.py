@@ -15,7 +15,7 @@ def parse(filepath, keep_spaces=False):
 
 		raw_data = start_file.read()
 	
-	if with_spases:
+	if keep_spaces:
 		raw_data = ' '.join(raw_data.split())			# Substitute whitespace characters with spaces
 
 	for symbol in raw_data:
@@ -38,7 +38,7 @@ def parse(filepath, keep_spaces=False):
 
 			parsed_data += symbol
 
-	if with_spases:
+	if keep_spaces:
 		parsed_data = ' '.join(parsed_data.split())		# Substitute whitespace characters after filtering
 
 
@@ -48,6 +48,7 @@ def parse(filepath, keep_spaces=False):
 
 
 	print('Data parsed to \'' + parsed_file_path + '\'')	
+
 
 
 
@@ -63,5 +64,6 @@ def main():
 	
 
 	parse(filepath, keep_spaces)
-        
+
+
 main()
