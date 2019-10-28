@@ -106,7 +106,7 @@ def calculate_index_of_coinsidence(text, alphabet_dict):
 	return res / (n * (n - 1))
 
 
-def find_key_length(text, alphabet_dict):
+def calculate_ICs(text, alphabet_dict):
 
 	res_dict = {}
 
@@ -126,10 +126,20 @@ def find_key_length(text, alphabet_dict):
 		print(block_len, res)
 		res_dict[block_len] = res
 
+		create_IC_csv(res_dict)
+
 	pass
 
+	return res_dict
 
-	#return res_dict
+
+def create_IC_csv(IC_dict):
+
+	with open('IC.csv', 'w') as of:
+
+		for key, value in IC_dict.items():
+
+			of.write('{},{}\n'.format(key, value))
 
 
 
@@ -167,8 +177,8 @@ def main():
 
 	#find_key_length(plaintext, ALPHABET_DICT)
 	
-	find_key_length(ciphertext, ALPHABET_DICT)
+	csv = calculate_ICs(ciphertext, ALPHABET_DICT)
 
-
+	create_IC_csv(csv)
 
 main()
