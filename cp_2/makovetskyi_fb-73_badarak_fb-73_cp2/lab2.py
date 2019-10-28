@@ -77,6 +77,25 @@ def calculate_index_of_coinsidence(text, alphabet_dict):
 	return res / (n * (n - 1))
 
 
+def vigenere_decrypt(plaintext, key, alphabet_dict):
+
+	reverse_alphabet_dict = {val: let for let, val in alphabet_dict.items()}
+	period = len(key)
+	plaintext = ''
+
+	for s in range(len(plaintext)):
+
+		ct_value = alphabet_dict[plaintext[s]]
+
+		key_value = alphabet_dict[key[s % period]]
+
+		pt_value = (ct_value - key_value) % len(alphabet_dict)
+
+		plaintext += reverse_alphabet_dict[pt_value]
+
+	return plaintext
+
+
 
 def main():
 
@@ -85,6 +104,7 @@ def main():
 	global KEYS_DICT
 
 	plaintext = import_data('TEXT_parsed.txt')
+	ciphertext = import_data('ciphertext_var11_parsed.txt')
 
 	# vigenere_encrypt_lab('TEXT_parsed.txt', KEYS_DICT, ALPHABET_DICT)	
 
@@ -106,7 +126,7 @@ def main():
 		ciphertext_4_IC, ciphertext_5_IC, ciphertext_12_IC))
 
 
-	
+
 
 
 
