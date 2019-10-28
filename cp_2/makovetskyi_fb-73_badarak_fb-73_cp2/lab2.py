@@ -21,7 +21,7 @@ KEYS_DICT = {
 	15: 'астроориентация'
 }
 
-THEORETICAL_FREQUENCES = {'ч': 0.015034171004991752, 'у': 0.029795188208325298, 'ж': 0.011383193721390263, 
+THEORETICAL_FREQUENCIES = {'ч': 0.015034171004991752, 'у': 0.029795188208325298, 'ж': 0.011383193721390263, 
 'о': 0.11560475894623333, 'й': 0.010619077204333326, 'м': 0.03125914975969607, 'и': 0.06689054566488849, 
 'р': 0.041951425041597934, 'е': 0.08193364326470567, 'т': 0.06399297298455342, 'л': 0.049303368539823325, 
 'я': 0.023675114796009453, 'п': 0.026886903614199712, 'ш': 0.010020995351029415, 'в': 0.03993222929208532, 
@@ -123,12 +123,8 @@ def calculate_ICs(text, alphabet_dict):
 			ic_sum += calculate_index_of_coinsidence(seq, alphabet_dict)
 
 		res = ic_sum / block_len
-		print(block_len, res)
+		print('{:>2} {:.6f}'.format(block_len, res))
 		res_dict[block_len] = res
-
-		create_IC_csv(res_dict)
-
-	pass
 
 	return res_dict
 
@@ -148,10 +144,10 @@ def main():
 	global ALPHABET
 	global ALPHABET_DICT
 	global KEYS_DICT
-	global THEORETICAL_FREQUENCES
+	global THEORETICAL_FREQUENCIES
 
 	plaintext = import_data('TEXT_parsed.txt')
-	ciphertext = import_data('ciphertext_var11_parsed.txt')
+	ciphertext_v2 = import_data('ciphertext_var2_parsed.txt')
 
 	vigenere_encrypt_lab('TEXT_parsed.txt', KEYS_DICT, ALPHABET_DICT)	
 
@@ -166,19 +162,18 @@ def main():
 	texts = {0: plaintext, 2: ciphertext_2, 3: ciphertext_3, 4: ciphertext_4, 5: ciphertext_5, 9: ciphertext_9, 12: ciphertext_12, 15: ciphertext_15}
 	indexes_of_coinsidence = {key: calculate_index_of_coinsidence(text, ALPHABET_DICT) for key, text in texts.items()}
 
-	theoretical_ic = sum([p*p for p in THEORETICAL_FREQUENCES.values()])
-
+	theoretical_ic = sum([p*p for p in THEORETICAL_FREQUENCIES.values()])
 
 	print(theoretical_ic, '\n')
-	'''
+	
 	for i, j in indexes_of_coinsidence.items():
 		print('{:>2} {:.6f}'.format(i, j))
-	'''
-
-	#find_key_length(plaintext, ALPHABET_DICT)
 	
-	csv = calculate_ICs(ciphertext, ALPHABET_DICT)
 
-	create_IC_csv(csv)
+	csv2 = calculate_ICs(ciphertext_v2, ALPHABET_DICT)
+	#create_IC_csv(csv)
+
+
+
 
 main()
