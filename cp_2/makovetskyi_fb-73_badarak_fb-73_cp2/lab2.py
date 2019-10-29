@@ -106,7 +106,7 @@ def calculate_index_of_coinsidence(text, alphabet_dict):
 	return res / (n * (n - 1))
 
 
-def calculate_ICs(text, alphabet_dict):
+def calculate_text_ICs(text, alphabet_dict):
 
 	res_dict = {}
 
@@ -123,10 +123,30 @@ def calculate_ICs(text, alphabet_dict):
 			ic_sum += calculate_index_of_coinsidence(seq, alphabet_dict)
 
 		res = ic_sum / block_len
-		print('{:>2} {:.6f}'.format(block_len, res))
+		#print('{:>2} {:.6f}'.format(block_len, res))
 		res_dict[block_len] = res
 
 	return res_dict
+
+
+def analyse_text_ICs(IC_dict):
+
+	avg = sum(IC_dict.values()) / len(IC_dict)
+
+	print('Average IC:', avg)
+	print('Possible key length variants:')
+
+	possible_key_len = {}
+	for key, value in IC_dict.items():
+		if value > avg:
+			possible_key_len[key] = value
+			print(key, value)
+	
+	if len(possible_key_len) == 1:
+		print('1 most possible key length variant, checking automatically')
+	else:
+		print(len(possible_key_len), 'variants of key length have to be checked manually')
+
 
 
 def create_IC_csv(IC_dict):
@@ -147,7 +167,7 @@ def main():
 	global THEORETICAL_FREQUENCIES
 
 	plaintext = import_data('TEXT_parsed.txt')
-	ciphertext_v2 = import_data('ciphertext_var2_parsed.txt')
+	ciphertext_v11 = import_data('ciphertext_var11_parsed.txt')
 
 	vigenere_encrypt_lab('TEXT_parsed.txt', KEYS_DICT, ALPHABET_DICT)	
 
@@ -164,13 +184,14 @@ def main():
 
 	theoretical_ic = sum([p*p for p in THEORETICAL_FREQUENCIES.values()])
 
-	print(theoretical_ic, '\n')
+	#print(theoretical_ic, '\n')
 	
-	for i, j in indexes_of_coinsidence.items():
-		print('{:>2} {:.6f}'.format(i, j))
+	#for i, j in indexes_of_coinsidence.items():
+	#	print('{:>2} {:.6f}'.format(i, j))
 	
 
-	csv2 = calculate_ICs(ciphertext_v2, ALPHABET_DICT)
+	ctext_v11_IC = calculate_text_ICs(ciphertext_v11, ALPHABET_DICT)
+	analyse_text_ICs(ctext_v11_IC)
 	#create_IC_csv(csv)
 
 
