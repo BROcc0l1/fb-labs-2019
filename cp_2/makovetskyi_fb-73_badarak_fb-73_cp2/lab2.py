@@ -106,14 +106,124 @@ def calculate_index_of_coinsidence(text, alphabet_dict):
 	return res / (n * (n - 1))
 
 
-def calculate_text_ICs(text, alphabet_dict):
+def get_letters_counts(text):
 
-	res_dict = {}
+	letters = {}
+	for i in text:
+		try:
+			letters[i] += 1
+		except:
+			letters[i] = 1
+
+	return letters
+
+
+def get_most_frequent(text):
+
+	letters = get_letters_counts(text)
+
+	for i in letters:
+		print(i, letters[i])
+
+	rev = {value: key for key, value in letters.items()}
+
+	return rev[max(rev)]
+
+
+def chi_squared_statistic(text, theor_freq, alphabet_dict):
+
+	text_length = len(text)
+	expected_counts = {key: text_length * value for key, value in theor_freq.items()}
+	letters_counts = get_letters_counts(text)
+	stat = 0
+
+	for letter, num in alphabet_dict.items():
+
+		stat += ((letters_counts[letter] - expected_counts[letter]) ** 2) / expected_counts[letter]
+		#print(letter, letters_counts[letter], expected_counts[letter])
+	
+	return stat
+		
+
+''' old version
+def break_Ceasar(text, alphabet_dict, theor_freq):
+
+	rev_AD = {num: letter for letter, num in alphabet_dict.items()}
+
+	chi_statictics = {}
+
+	for probable_key in alphabet_dict.values():
+
+		decrypted_text = ''
+
+		for letter in text:
+
+			encrypted_letter_value = alphabet_dict[letter]
+			decrypted_letter_value = (encrypted_letter_value - probable_key) % len(alphabet_dict)
+			decrypted_letter = rev_AD[decrypted_letter_value]
+			decrypted_text += decrypted_letter
+
+		chi_statictics[probable_key] = chi_squared_statistic(decrypted_text, theor_freq, alphabet_dict)
+		#break
+
+	print(chi_statictics)
+	rev_chi = {value: key for key, value in chi_statictics.items()}
+	print('most probable caesar key:', rev_chi[min(rev_chi)])
+
+	# TODO: finish this shit
+'''
+
+# decipher Caesar cipher for integer key
+def decipher_Caesar(text, key, alphabet_dict):
+
+	rev_AD = {num: letter for letter, num in alphabet_dict.items()}
+
+	deciphered_text = ''
+
+	for letter in text:
+
+		encrypted_letter_value = alphabet_dict[letter]
+		decrypted_letter_value = (encrypted_letter_value - key) % len(alphabet_dict)
+		decrypted_letter = rev_AD[decrypted_letter_value]
+		deciphered_text += decrypted_letter
+
+	return deciphered_text
+
+
+# break Caesar cipher using frequency analysis
+# call the next iteration if the text does not match
+# (specificly done for vigenere decryption)
+def break_Caesar(text, theor_freq, alphabet_dict, iteration=1):
+
+	sorted_theor = sorted(theor_freq.items(), key=lambda kv: kv[1], reverse = True)
+
+	current_theor_value = sorted_theor[iteration - 1][1]
+
+	most_frequent_in_text = get_most_frequent(text)
+
+	probable_key = (most_frequent_in_text - current_theor_value) % len(alphabet_dict)
+
+	decrypted_text = decipher_Caesar(text, probable_key, alphabet_dict)
+
+	return decrypted_text
+
+
+# TODO: finish this
+def break_Vigenere(text, alphabet_dict):
+
+	global THEORETICAL_FREQUENCIES
+
+	reverse_alphabet_dict = {value: key for key, value in ALPHABET_DICT.items()}
+
+	#
+	#	Find key length
+	#
+
+	IC_dict = {}
 
 	for block_len in range(2, 31):
 
 		ic_sum = 0
-		
 
 		for i in range(block_len):
 			seq = ''
@@ -124,28 +234,50 @@ def calculate_text_ICs(text, alphabet_dict):
 
 		res = ic_sum / block_len
 		#print('{:>2} {:.6f}'.format(block_len, res))
-		res_dict[block_len] = res
+		IC_dict[block_len] = res
 
-	return res_dict
-
-
-def analyse_text_ICs(IC_dict):
 
 	avg = sum(IC_dict.values()) / len(IC_dict)
 
 	print('Average IC:', avg)
 	print('Possible key length variants:')
 
-	possible_key_len = {}
+	possible_key_len_dict = {}
+
 	for key, value in IC_dict.items():
 		if value > avg:
-			possible_key_len[key] = value
+			possible_key_len_dict[key] = value
 			print(key, value)
 	
-	if len(possible_key_len) == 1:
+	if len(possible_key_len_dict) == 1:
 		print('1 most possible key length variant, checking automatically')
 	else:
-		print(len(possible_key_len), 'variants of key length have to be checked manually')
+		print(len(possible_key_len_dict), 'variants of key length have to be checked manually')
+
+	#
+	# For every possible key length try to decipher Caesar
+	#
+	for key_len in possible_key_len_dict:
+		
+		print('Trying to decipher for key len =', key_len)
+
+		caesar_sequences = []
+
+		for i in range(key_len):
+			caesar_sequences.append('')
+
+		for i in range(len(text)):
+			caesar_sequences[i % key_len] += text[i]
+
+		''' old version
+		seq = ''
+		for i in range(0, len(text), key_len):
+			seq += text[i]
+		'''
+
+
+		
+
 
 
 
@@ -191,10 +323,8 @@ def main():
 	
 
 	ctext_v11_IC = calculate_text_ICs(ciphertext_v11, ALPHABET_DICT)
-	analyse_text_ICs(ctext_v11_IC)
 	#create_IC_csv(csv)
-
-
+	#print(break_Caesar('', ))
 
 
 main()
