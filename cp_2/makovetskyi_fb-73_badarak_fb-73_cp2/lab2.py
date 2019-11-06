@@ -56,15 +56,15 @@ def vigenere_encrypt(plaintext, key, alphabet_dict):
 	return ciphertext
 
 
-def vigenere_decrypt(plaintext, key, alphabet_dict):
+def vigenere_decrypt(ciphertext, key, alphabet_dict):
 
 	reverse_alphabet_dict = {val: let for let, val in alphabet_dict.items()}
 	period = len(key)
 	plaintext = ''
 
-	for s in range(len(plaintext)):
+	for s in range(len(ciphertext)):
 
-		ct_value = alphabet_dict[plaintext[s]]
+		ct_value = alphabet_dict[ciphertext[s]]
 
 		key_value = alphabet_dict[key[s % period]]
 
@@ -72,6 +72,17 @@ def vigenere_decrypt(plaintext, key, alphabet_dict):
 
 		plaintext += reverse_alphabet_dict[pt_value]
 
+	return plaintext
+
+
+def decrypt(ciphertext, key):
+	key_length = len(key)
+	key_as_int = [ord(i) for i in key]
+	ciphertext_int = [ord(i) for i in ciphertext]
+	plaintext = ''
+	for i in range(len(ciphertext_int)):
+		value = (ciphertext_int[i] - key_as_int[i % key_length]) % 26
+		plaintext += chr(value + 65)
 	return plaintext
 
 
@@ -122,13 +133,9 @@ def get_most_frequent(text):
 
 	letters = get_letters_counts(text)
 
-	for i in letters:
-		print(i, letters[i])
-
 	rev = {value: key for key, value in letters.items()}
 
 	return rev[max(rev)]
-
 
 def chi_squared_statistic(text, theor_freq, alphabet_dict):
 
@@ -196,16 +203,36 @@ def decipher_Caesar(text, key, alphabet_dict):
 def break_Caesar(text, theor_freq, alphabet_dict, iteration=1):
 
 	sorted_theor = sorted(theor_freq.items(), key=lambda kv: kv[1], reverse = True)
+	rev_AD = {num: letter for letter, num in alphabet_dict.items()}
 
-	current_theor_value = sorted_theor[iteration - 1][1]
+	current_theor_letter = sorted_theor[iteration - 1][0]
+	current_theor_value = alphabet_dict[current_theor_letter]
 
 	most_frequent_in_text = get_most_frequent(text)
+	most_frequent_in_text_value = alphabet_dict[most_frequent_in_text]
 
-	probable_key = (most_frequent_in_text - current_theor_value) % len(alphabet_dict)
+	probable_key = (most_frequent_in_text_value - current_theor_value) % len(alphabet_dict) # ?
 
 	decrypted_text = decipher_Caesar(text, probable_key, alphabet_dict)
+	#print(sorted_theor[1], '@@@@@@@@')
+	#print(sorted_theor)
 
-	return decrypted_text
+	return (decrypted_text, rev_AD[probable_key])
+
+
+def break_Caesar_v2(text, theor_freq, alphabet_dict):
+	global THEORETICAL_FREQUENCIES
+
+	letters_in_text = get_letters_counts(text)
+	p = THEORETICAL_FREQUENCIES
+
+	m = 0
+
+	for letter, frequency in THEORETICAL_FREQUENCIES:
+
+		m += letters_in_text[letter] * frequency
+
+	return m
 
 
 # TODO: finish this
@@ -269,15 +296,44 @@ def break_Vigenere(text, alphabet_dict):
 		for i in range(len(text)):
 			caesar_sequences[i % key_len] += text[i]
 
+		
 		''' old version
 		seq = ''
 		for i in range(0, len(text), key_len):
 			seq += text[i]
 		'''
 
+		deciphered_sequences = []
+		key = ''
+
+		for i in range(key_len):
+			deciphered_sequences.append('')
+
+		for seq_num in range(len(caesar_sequences)):
+			deciphered_sequences[seq_num], key_part = break_Caesar(caesar_sequences[seq_num], THEORETICAL_FREQUENCIES, alphabet_dict, 1)
+			key += key_part
 
 		
+		# Manual search here
+		# change block 8
 
+		deciphered_sequences[14], key1 = break_Caesar(caesar_sequences[14], THEORETICAL_FREQUENCIES, alphabet_dict, 12)
+
+		print(key, '<---')
+
+		result_text = ''
+
+		for i in range(len(deciphered_sequences[0])):
+
+			for seq in deciphered_sequences:
+
+				if i < len(seq):
+
+					result_text += seq[i]
+
+			result_text += '|'
+
+		print(result_text)
 
 
 
@@ -322,7 +378,7 @@ def main():
 	#	print('{:>2} {:.6f}'.format(i, j))
 	
 
-	ctext_v11_IC = calculate_text_ICs(ciphertext_v11, ALPHABET_DICT)
+	break_Vigenere(ciphertext_v11, ALPHABET_DICT)
 	#create_IC_csv(csv)
 	#print(break_Caesar('', ))
 
