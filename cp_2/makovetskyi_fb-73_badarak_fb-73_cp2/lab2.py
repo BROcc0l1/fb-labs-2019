@@ -240,22 +240,27 @@ def break_Vigenere(text, alphabet_dict):
 
 	possible_key_len_dict = {}
 
+	max_ic = 0
+	k_len = 0
+	for k, v in IC_dict.items():
+		print('{:>2} {:.6f}'.format(k, v))
+		if v > max_ic:
+			max_ic = v
+			k_len = k
+
+	print('\nKey length: ')
 	for key, value in IC_dict.items():
-		if value > avg:
+		if value == max_ic:
 			possible_key_len_dict[key] = value
-			print(key, value)
-	
-	if len(possible_key_len_dict) == 1:
-		print('1 most possible key length variant, checking automatically')
-	else:
-		print(len(possible_key_len_dict), 'variants of key length have to be checked manually')
+			print(key)
+
 
 	#
 	# For every possible key length try to decipher Caesar
 	#
 	for key_len in possible_key_len_dict:
 		
-		print('Trying to decipher for key len =', key_len)
+		print('\nTrying to decipher for key len =', key_len)
 
 		caesar_sequences = []
 
@@ -292,7 +297,7 @@ def break_Vigenere(text, alphabet_dict):
 		# Manual improvements in CLI
 		#
 		print('Possible key:', key)
-		print('Check if the text is OK and change the letter of the key if needed')
+		print('Check if the text is OK and change the letter of the key if needed\n')
 		print(result_text)
 
 		while True:
