@@ -18,7 +18,8 @@ KEYS_DICT = {
 	5: 'морти',
 	9: 'автопилот',
 	12: 'велоцераптор',
-	15: 'астроориентация'
+	15: 'астроориентация',
+	20: 'баллистокардиография'
 }
 
 THEORETICAL_FREQUENCIES = {'ч': 0.015034171004991752, 'у': 0.029795188208325298, 'ж': 0.011383193721390263, 
@@ -72,17 +73,6 @@ def vigenere_decrypt(ciphertext, key, alphabet_dict):
 
 		plaintext += reverse_alphabet_dict[pt_value]
 
-	return plaintext
-
-
-def decrypt(ciphertext, key):
-	key_length = len(key)
-	key_as_int = [ord(i) for i in key]
-	ciphertext_int = [ord(i) for i in ciphertext]
-	plaintext = ''
-	for i in range(len(ciphertext_int)):
-		value = (ciphertext_int[i] - key_as_int[i % key_length]) % 26
-		plaintext += chr(value + 65)
 	return plaintext
 
 
@@ -265,7 +255,7 @@ def break_Vigenere(text, alphabet_dict):
 			result_text += '|'
 
 		#
-		# Manual improvements in CLI
+		# Manual improvements using CLI
 		#
 		print('Possible key:', key)
 		print('Check if the text is OK and change the letter of the key if needed\n')
@@ -342,9 +332,9 @@ def break_Vigenere(text, alphabet_dict):
 				break
 
 
-def create_IC_csv(IC_dict):
+def create_IC_csv(IC_dict, filename):
 
-	with open('IC.csv', 'w') as of:
+	with open(filename, 'w') as of:
 
 		for key, value in IC_dict.items():
 
@@ -371,8 +361,11 @@ def main():
 	ciphertext_9 = import_data('TEXT_parsed_encrypted_keylen_9.txt')
 	ciphertext_12 = import_data('TEXT_parsed_encrypted_keylen_12.txt')
 	ciphertext_15 = import_data('TEXT_parsed_encrypted_keylen_15.txt')
+	ciphertext_20 = import_data('TEXT_parsed_encrypted_keylen_20.txt')
 
-	texts = {0: plaintext, 2: ciphertext_2, 3: ciphertext_3, 4: ciphertext_4, 5: ciphertext_5, 9: ciphertext_9, 12: ciphertext_12, 15: ciphertext_15}
+	texts = {0: plaintext, 2: ciphertext_2, 3: ciphertext_3, 4: ciphertext_4, 5: ciphertext_5, 
+	9: ciphertext_9, 12: ciphertext_12, 15: ciphertext_15, 20: ciphertext_20}
+
 	indexes_of_coinsidence = {key: calculate_index_of_coinsidence(text, ALPHABET_DICT) for key, text in texts.items()}
 
 	theoretical_ic = sum([p*p for p in THEORETICAL_FREQUENCIES.values()])
@@ -381,7 +374,7 @@ def main():
 	#	print('{:>2} {:.6f}'.format(i, j))
 
 	break_Vigenere(ciphertext_v11, ALPHABET_DICT)
-	#create_IC_csv(csv)
+	#create_IC_csv(indexes_of_coinsidence, 'myIC.csv')
 
 
 main()
