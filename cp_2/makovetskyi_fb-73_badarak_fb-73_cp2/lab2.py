@@ -317,9 +317,7 @@ def break_Vigenere(text, alphabet_dict):
 		# Manual search here
 		# change block 8
 
-		deciphered_sequences[14], key1 = break_Caesar(caesar_sequences[14], THEORETICAL_FREQUENCIES, alphabet_dict, 12)
-
-		print(key, '<---')
+		#deciphered_sequences[14], key1 = break_Caesar(caesar_sequences[14], THEORETICAL_FREQUENCIES, alphabet_dict, 12)
 
 		result_text = ''
 
@@ -333,8 +331,79 @@ def break_Vigenere(text, alphabet_dict):
 
 			result_text += '|'
 
+		print('Possible key:', key)
+		print('Check if the text is OK and change the letter of the key if needed')
 		print(result_text)
 
+		while True:
+
+			print('\nChoose an option:')
+			print('1. Retry one of the blocks')
+			print('2. View current text')
+			print('3. View current key')
+			print('4. Finish and write the deciphered text to file')
+
+			option = input()
+			retry_iteration = 2
+			
+
+			if option == '1':
+
+				ind = int(input('Enter the index of the character to retry: '))
+				
+				while True:
+
+					new_result_text = ''
+					new_key_list = [c for c in key]
+					print(new_key_list)
+
+					deciphered_sequences[ind], key_part1 = break_Caesar(
+						caesar_sequences[ind], THEORETICAL_FREQUENCIES, alphabet_dict, retry_iteration)
+
+					new_key_list[ind] = key_part1
+					new_key = ''.join(new_key_list)
+
+					for i in range(len(deciphered_sequences[0])):
+
+						for seq in deciphered_sequences:
+
+							if i < len(seq):
+								new_result_text += seq[i]
+
+						new_result_text += '|'
+
+					print(new_result_text)
+
+					print('\nPossible key:', new_key, '\titeration:', retry_iteration)
+					print('Check if the text is OK and change the letter of the key if needed')
+					print('\nChoose an option:')
+					print('1. Retry')
+					print('2. Finish and go back')
+					des = input()
+					if des == '2':
+						key = new_key
+						break
+					if des == '1':
+						retry_iteration += 1
+
+			if option == '2':
+
+				print(vigenere_decrypt(text, key, alphabet_dict))
+
+			if option == '3':
+
+				print(key)
+
+			if option == '4':
+
+				filename = input('Enter the output file name: ')
+
+				with open(filename, 'w', encoding='utf-8') as decrypted_file:
+
+					decrypted_file.write(vigenere_decrypt(text, key, alphabet_dict))
+
+				print('Decrypted text written to ' + filename)
+				break
 
 
 def create_IC_csv(IC_dict):
