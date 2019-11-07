@@ -147,38 +147,10 @@ def chi_squared_statistic(text, theor_freq, alphabet_dict):
 	for letter, num in alphabet_dict.items():
 
 		stat += ((letters_counts[letter] - expected_counts[letter]) ** 2) / expected_counts[letter]
-		#print(letter, letters_counts[letter], expected_counts[letter])
+		
 	
 	return stat
 		
-
-''' old version
-def break_Ceasar(text, alphabet_dict, theor_freq):
-
-	rev_AD = {num: letter for letter, num in alphabet_dict.items()}
-
-	chi_statictics = {}
-
-	for probable_key in alphabet_dict.values():
-
-		decrypted_text = ''
-
-		for letter in text:
-
-			encrypted_letter_value = alphabet_dict[letter]
-			decrypted_letter_value = (encrypted_letter_value - probable_key) % len(alphabet_dict)
-			decrypted_letter = rev_AD[decrypted_letter_value]
-			decrypted_text += decrypted_letter
-
-		chi_statictics[probable_key] = chi_squared_statistic(decrypted_text, theor_freq, alphabet_dict)
-		#break
-
-	print(chi_statictics)
-	rev_chi = {value: key for key, value in chi_statictics.items()}
-	print('most probable caesar key:', rev_chi[min(rev_chi)])
-
-	# TODO: finish this shit
-'''
 
 # decipher Caesar cipher for integer key
 def decipher_Caesar(text, key, alphabet_dict):
@@ -214,9 +186,7 @@ def break_Caesar(text, theor_freq, alphabet_dict, iteration=1):
 	probable_key = (most_frequent_in_text_value - current_theor_value) % len(alphabet_dict) # ?
 
 	decrypted_text = decipher_Caesar(text, probable_key, alphabet_dict)
-	#print(sorted_theor[1], '@@@@@@@@')
-	#print(sorted_theor)
-
+	
 	return (decrypted_text, rev_AD[probable_key])
 
 
@@ -235,7 +205,6 @@ def break_Caesar_v2(text, theor_freq, alphabet_dict):
 	return m
 
 
-# TODO: finish this
 def break_Vigenere(text, alphabet_dict):
 
 	global THEORETICAL_FREQUENCIES
@@ -260,7 +229,7 @@ def break_Vigenere(text, alphabet_dict):
 			ic_sum += calculate_index_of_coinsidence(seq, alphabet_dict)
 
 		res = ic_sum / block_len
-		#print('{:>2} {:.6f}'.format(block_len, res))
+		
 		IC_dict[block_len] = res
 
 
@@ -296,12 +265,6 @@ def break_Vigenere(text, alphabet_dict):
 		for i in range(len(text)):
 			caesar_sequences[i % key_len] += text[i]
 
-		
-		''' old version
-		seq = ''
-		for i in range(0, len(text), key_len):
-			seq += text[i]
-		'''
 
 		deciphered_sequences = []
 		key = ''
@@ -312,12 +275,6 @@ def break_Vigenere(text, alphabet_dict):
 		for seq_num in range(len(caesar_sequences)):
 			deciphered_sequences[seq_num], key_part = break_Caesar(caesar_sequences[seq_num], THEORETICAL_FREQUENCIES, alphabet_dict, 1)
 			key += key_part
-
-		
-		# Manual search here
-		# change block 8
-
-		#deciphered_sequences[14], key1 = break_Caesar(caesar_sequences[14], THEORETICAL_FREQUENCIES, alphabet_dict, 12)
 
 		result_text = ''
 
@@ -331,6 +288,9 @@ def break_Vigenere(text, alphabet_dict):
 
 			result_text += '|'
 
+		#
+		# Manual improvements in CLI
+		#
 		print('Possible key:', key)
 		print('Check if the text is OK and change the letter of the key if needed')
 		print(result_text)
@@ -440,16 +400,12 @@ def main():
 	indexes_of_coinsidence = {key: calculate_index_of_coinsidence(text, ALPHABET_DICT) for key, text in texts.items()}
 
 	theoretical_ic = sum([p*p for p in THEORETICAL_FREQUENCIES.values()])
-
-	#print(theoretical_ic, '\n')
 	
 	#for i, j in indexes_of_coinsidence.items():
 	#	print('{:>2} {:.6f}'.format(i, j))
-	
 
 	break_Vigenere(ciphertext_v11, ALPHABET_DICT)
 	#create_IC_csv(csv)
-	#print(break_Caesar('', ))
 
 
 main()
