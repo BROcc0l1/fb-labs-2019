@@ -136,20 +136,6 @@ def get_most_frequent(text):
 	rev = {value: key for key, value in letters.items()}
 
 	return rev[max(rev)]
-
-def chi_squared_statistic(text, theor_freq, alphabet_dict):
-
-	text_length = len(text)
-	expected_counts = {key: text_length * value for key, value in theor_freq.items()}
-	letters_counts = get_letters_counts(text)
-	stat = 0
-
-	for letter, num in alphabet_dict.items():
-
-		stat += ((letters_counts[letter] - expected_counts[letter]) ** 2) / expected_counts[letter]
-		
-	
-	return stat
 		
 
 # decipher Caesar cipher for integer key
@@ -188,21 +174,6 @@ def break_Caesar(text, theor_freq, alphabet_dict, iteration=1):
 	decrypted_text = decipher_Caesar(text, probable_key, alphabet_dict)
 	
 	return (decrypted_text, rev_AD[probable_key])
-
-
-def break_Caesar_v2(text, theor_freq, alphabet_dict):
-	global THEORETICAL_FREQUENCIES
-
-	letters_in_text = get_letters_counts(text)
-	p = THEORETICAL_FREQUENCIES
-
-	m = 0
-
-	for letter, frequency in THEORETICAL_FREQUENCIES:
-
-		m += letters_in_text[letter] * frequency
-
-	return m
 
 
 def break_Vigenere(text, alphabet_dict):
