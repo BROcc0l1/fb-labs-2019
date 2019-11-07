@@ -33,8 +33,8 @@ def parse(filepath, keep_spaces=False):
 			if symbol == 'ё':
 				symbol = 'е'
 
-			if symbol == 'ъ':
-				symbol = 'ь'
+			#if symbol == 'ъ':
+			#	symbol = 'ь'
 
 			parsed_data += symbol
 
