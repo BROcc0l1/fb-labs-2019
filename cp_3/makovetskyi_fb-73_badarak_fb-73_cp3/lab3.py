@@ -67,9 +67,29 @@ def modular_inverse(a, b):
 
 
 # Solve linear equasion:
-# ax = b mod m
-def solve_linear_equasions(a, b, m):
+# ax = b mod n
+def solve_linear_equasion(a, b, n):
 
-	pass
+	gcd_val = gcd(a, n)
 
-print(modular_inverse(8, 26))
+	if gcd_val == 1:
+
+		x = (b * modular_inverse(a, n)) % n
+		return list(x)
+
+	elif gcd_val > 1:
+
+		if b % d != 0:
+			raise ValueError('The equasion has no solutions.')
+
+		if b % d == 0:
+
+			# d solutions
+			x0 = solve_linear_equasion(a / gcd_val, b / gcd_val, x / gcd_val)
+			res = []
+			for i in range(d):
+				res[i] = (n / gcd) * i + x0 % n
+
+			return res
+
+
