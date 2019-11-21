@@ -1,5 +1,5 @@
 # Variant 11
-
+#test
 ALPHABET = 'абвгдежзийклмнопрстуфхцчшщыьэюя'
 
 ALPHABET_DICT = {
