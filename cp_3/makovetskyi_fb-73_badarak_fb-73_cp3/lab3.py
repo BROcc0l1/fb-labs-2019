@@ -89,22 +89,31 @@ def modular_inverse(a, b):
 def solve_linear_equasion(a, b, n):
 	#print(a, n, '<<<')
 
-	gcd_val = gcd(a, n)
+	d = gcd(a, n)
 
-	if gcd_val == 1:
+	if d == 1:
 
 		x = (b * modular_inverse(a, n)) % n
 
 		return [x]
 
-	elif gcd_val > 1:
+	elif d > 1:
 
-		if b % gcd_val != 0:
+		if b % d != 0:
 			raise ValueError('The equasion has no solutions.')
 
-		if b % gcd_val == 0:
+		if b % d == 0:
 
-			pass
+			res = []
+			a1 = a // d; b1 = b // d; n1 = n // d
+			x0 = (b1 * modular_inverse(a1, n1)) % n1
+			
+			for i in range(d):
+				res.append(x0 + i * n1)
+
+		return res
+				
+
 
 
 def check_text_reality(text): # TODO: finish and improve
@@ -205,4 +214,4 @@ def main():
 
 
 #print(get_all_bigrams_pairs(['аб','вг','де']))
-main()
+#main()
