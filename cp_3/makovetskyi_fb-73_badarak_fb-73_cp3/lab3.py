@@ -152,7 +152,7 @@ def check_text_reality(text): # TODO: finish and improve
 
 	for b in forbidden_bigrams:
 		if b in text:
-			return False
+			return 'Forbidden bigram found: ' + str(b)
 
 
 	# Filtering using monogram frequencies
@@ -165,7 +165,7 @@ def check_text_reality(text): # TODO: finish and improve
 	pass
 	
 
-	return True
+	return 1
 
 
 def get_all_bigrams_pairs(arr):
@@ -267,7 +267,7 @@ def attack_affine(theoretical, practical, ciphertext, logfile):
 	logfile.write('\n\nPairs of most frequent bigrams (practical):\n')
 	logfile.write(str(all_encr))
 
-	res = []
+	matched_texts = {}
 	keys = []
 
 	# Match all bigrams in language to the ones in ciphertext
@@ -286,26 +286,42 @@ def attack_affine(theoretical, practical, ciphertext, logfile):
 	#print(keys)
 	logfile.write('\n\nAll possible keys:\n')
 	logfile.write(str(keys))
+	logfile.write('\n\nBad keys and reasons why:\n')
 
 	# Decipher text for each key and check if it is ok
-	# TODO: fix repeating after good res bug
+	# TODO: fix same keys bug
 	for key in keys:
 
 		deciphered_text = decipher_affine_bigram(ciphertext, key)
 
 		if deciphered_text == False:
 			continue
-
+		'''
 		with open('res.txt', 'a', encoding='utf-8') as f:
-			f.write(str(key) + ' ' + str(bigram_to_int(key[0])) + ' ' + str(bigram_to_int(key[1])) + '\n')
+			f.write('Key: ' + str(key) + ' ' + str(bigram_to_int(key[0])) + ' ' + str(bigram_to_int(key[1])) + '\n')
 			f.write(deciphered_text)
 			f.write('\n\n')
-
+		'''
 		#print(deciphered_text)
-		if check_text_reality(deciphered_text) == True:
+		is_real = check_text_reality(deciphered_text)
 
-			print(key, bigram_to_int(key[0]), bigram_to_int(key[1]))
+		if is_real == 1:
+			print('Key:', key, bigram_to_int(key[0]), bigram_to_int(key[1]))
 			print(deciphered_text)
+			matched_texts[key] = deciphered_text
+
+		else:
+			print('Key:', key, bigram_to_int(key[0]), bigram_to_int(key[1]))
+			print('The text is not real: ' + is_real + '\n')
+			logfile.write('\nKey: ' + str(key) + ' ' + str(bigram_to_int(key[0])) + ' ' + str(bigram_to_int(key[1])) + '\n')
+			logfile.write('The text is not real:\n' + is_real + '\n')
+
+	logfile.write('\n\nAll texts that matched the text reality check and their texts:')
+
+	for key in matched_texts:
+		logfile.write('\n\nKey: ' + str(key) + '\n\n')
+		logfile.write(matched_texts[key])
+
 
 
 def find_most_frequent_bigrams(text, quan):
