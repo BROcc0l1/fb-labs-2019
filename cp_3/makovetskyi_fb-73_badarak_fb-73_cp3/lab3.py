@@ -283,7 +283,7 @@ def attack_affine(theoretical, practical, ciphertext, logfile):
 	
 	# Remove duplicate keys
 	keys = list(dict.fromkeys(keys))
-	
+
 	logfile.write('\n\nAll possible keys:\n')
 	logfile.write(str(keys))
 	logfile.write('\n\nBad keys and reasons why:\n')
@@ -319,7 +319,7 @@ def attack_affine(theoretical, practical, ciphertext, logfile):
 	logfile.write('\n\nAll texts that matched the text reality check and their texts:')
 
 	for key in matched_texts:
-		logfile.write('\n\nKey: ' + str(key) + '\n\n')
+		logfile.write('\n\nKey: ' + str(key) + ' or (' + str(bigram_to_int(key[0])) + ', ' + str(bigram_to_int(key[1])) + ')\n\n')
 		logfile.write(matched_texts[key])
 
 
