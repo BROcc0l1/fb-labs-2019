@@ -284,6 +284,8 @@ def attack_affine(theoretical, practical, ciphertext, logfile):
 			#print(key, 'OOOO')
 
 	#print(keys)
+	logfile.write('\n\nAll possible keys:\n')
+	logfile.write(str(keys))
 
 	# Decipher text for each key and check if it is ok
 	# TODO: fix repeating after good res bug
