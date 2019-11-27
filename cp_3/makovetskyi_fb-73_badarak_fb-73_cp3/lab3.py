@@ -274,16 +274,16 @@ def attack_affine(theoretical, practical, ciphertext, logfile):
 	# and find the keys for them
 	for i in range(len(all_lang)):
 		for j in range(len(all_encr)):
-			#print(all_lang[i], all_encr[j])
 			#continue
 			key = find_key(all_lang[i], all_encr[j])
 			if key == False:
 				continue
 			for k in key:
 				keys.append(k)
-			#print(key, 'OOOO')
-
-	#print(keys)
+	
+	# Remove duplicate keys
+	keys = list(dict.fromkeys(keys))
+	
 	logfile.write('\n\nAll possible keys:\n')
 	logfile.write(str(keys))
 	logfile.write('\n\nBad keys and reasons why:\n')
