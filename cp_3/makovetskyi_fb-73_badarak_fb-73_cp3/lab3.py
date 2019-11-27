@@ -256,10 +256,16 @@ def decipher_affine_bigram(text, key):
 	return res
 
 
-def attack_affine(theoretical, practical, ciphertext):
+def attack_affine(theoretical, practical, ciphertext, logfile):
 
 	all_lang = get_all_bigrams_pairs(theoretical)
 	all_encr = get_all_bigrams_pairs(practical)
+
+	logfile.write('Pairs of most frequent bigrams (theoretical):\n')
+	logfile.write(str(all_lang))
+
+	logfile.write('\n\nPairs of most frequent bigrams (practical):\n')
+	logfile.write(str(all_encr))
 
 	res = []
 	keys = []
@@ -279,6 +285,8 @@ def attack_affine(theoretical, practical, ciphertext):
 
 	#print(keys)
 
+	# Decipher text for each key and check if it is ok
+	# TODO: fix repeating after good res bug
 	for key in keys:
 
 		deciphered_text = decipher_affine_bigram(ciphertext, key)
@@ -324,6 +332,8 @@ def main():
 	global THEORETICAL_MOST_FREQUENT_BIGRAMS
 	global PRACTICAL_MOST_FREQUENT_BIGRAMS
 
+	logfile = open('results.txt', 'w', encoding='utf-8')
+
 	ciphertext = import_data('11.txt')
 
 	ciphertext = ''.join(ciphertext.split())
@@ -331,7 +341,7 @@ def main():
 	pr_most_frequent = find_most_frequent_bigrams(ciphertext, 5)
 	print(pr_most_frequent)
 
-	attack_affine(THEORETICAL_MOST_FREQUENT_BIGRAMS, pr_most_frequent, ciphertext)
+	attack_affine(THEORETICAL_MOST_FREQUENT_BIGRAMS, pr_most_frequent, ciphertext, logfile)
 
 	#print(decipher_affine_bigram(plaintext, ('цх', 'яы')))
 
