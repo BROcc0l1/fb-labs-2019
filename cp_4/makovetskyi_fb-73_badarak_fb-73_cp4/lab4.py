@@ -1,6 +1,5 @@
 # var2
 from collections import deque
-from collections import Counter
 
 p1 = (1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0)
 p2 = (1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0)
@@ -27,10 +26,7 @@ def lfsr(poly, outputfile):
 		for i in range(1, len(register)):
 			temp = temp ^ (register[i] * poly[i])
 
-		#print(register)
-
-		a = register.popleft()
-		result.append(a)
+		result.append(register.popleft())
 		period += 1
 
 		register.append(temp)
@@ -89,7 +85,7 @@ def autocorrelation_task(arr, period):
 	res = {}
 	for d in range(11):
 		res[d] = autocorrelation(arr, period, d)
-		print('autocorrelation for d=' + str(d), autocorrelation(arr, period, d))
+		print('autocorrelation for d=' + str(d) + ':', autocorrelation(arr, period, d))
 	return res
 
 
@@ -101,6 +97,7 @@ def import_data(filename):
 
 def main():
 
+	print('\n==== POLYNOM 1 ====\n')
 	period1 = lfsr(p1, 'LFSR_result1.txt')
 
 	print('Period:', period1)
@@ -113,6 +110,7 @@ def main():
 	ngram_count_task(data1, len(p1), 'L1_ngrams.txt')
 
 
+	print('\n==== POLYNOM 2 ====\n')
 
 	period2 = lfsr(p2, 'LFSR_result2.txt')
 
