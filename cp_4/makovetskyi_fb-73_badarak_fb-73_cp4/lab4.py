@@ -1,16 +1,15 @@
 # var2
 from collections import deque
 from collections import Counter
-p1 = (1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1)
-p2 = (1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0)
 
-arr1 = [1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0]
-arr2 = [1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0]
+p1 = (1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0)
+p2 = (1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0)
 
 
 def lfsr(poly, outputfile):
 
 	register = deque()
+
 	result = []
 	period = 0
 
@@ -87,9 +86,9 @@ def ngram_count_task(text, max_len, filename):
 
 def autocorrelation_task(arr, period):
 
-	res = []
+	res = {}
 	for d in range(11):
-		res.append(autocorrelation(arr, period, d))
+		res[d] = autocorrelation(arr, period, d)
 		print('autocorrelation for d=' + str(d), autocorrelation(arr, period, d))
 	return res
 
@@ -102,29 +101,29 @@ def import_data(filename):
 
 def main():
 
-	period1 = lfsr(arr1, 'LFSR_result1.txt')
+	period1 = lfsr(p1, 'LFSR_result1.txt')
 
-	print(period1)
+	print('Period:', period1)
 
 	data1 = import_data('LFSR_result1.txt')
 
 	#print(ngram_count(data1, 2))
 
-	print(autocorrelation_task(data1, 1398101))#period1))
-	ngram_count_task(data1, len(arr1), 'L1_ngrams.txt')
+	autocorrelation_task(data1, period1)
+	ngram_count_task(data1, len(p1), 'L1_ngrams.txt')
 
 
 
-	period2 = lfsr(arr2, 'LFSR_result2.txt')
+	period2 = lfsr(p2, 'LFSR_result2.txt')
 
-	print(period2)
+	print('Period:', period2)
 
 	data2 = import_data('LFSR_result2.txt')
 
 	#print(ngram_count(data1, 2))
 
-	print(autocorrelation_task(data2, period2))
-	ngram_count_task(data2, len(arr2), 'L2_ngrams.txt')
+	autocorrelation_task(data2, period2)
+	ngram_count_task(data2, len(p2), 'L2_ngrams.txt')
 
 
 
