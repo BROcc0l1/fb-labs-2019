@@ -8,9 +8,9 @@ p2 = (1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0)
 def lfsr(poly, outputfile):
 
 	register = deque()
-
-	result = []
 	period = 0
+
+	f = open(outputfile, 'w', encoding='utf-8')
 
 	# Initialize register state (impulse function)
 	for i in range(len(poly) - 1):
@@ -26,16 +26,14 @@ def lfsr(poly, outputfile):
 		for i in range(1, len(register)):
 			temp = temp ^ (register[i] * poly[i])
 
-		result.append(register.popleft())
+		f.write(str(register.popleft()))
 		period += 1
 
 		register.append(temp)
 
 		if register == start_state:
 
-			with open(outputfile, 'w', encoding='utf-8') as f:
-				for i in result:
-					f.write(str(i))
+			f.close()
 			print("LFSR result written to " + outputfile)
 
 			return period
