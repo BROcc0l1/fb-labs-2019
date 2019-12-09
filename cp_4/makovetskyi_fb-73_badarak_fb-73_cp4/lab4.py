@@ -38,8 +38,6 @@ def lfsr(poly, outputfile):
 
 		if register == start_state:
 
-			print(register)
-
 			with open(outputfile, 'w', encoding='utf-8') as f:
 				for i in result:
 					f.write(str(i))
@@ -48,13 +46,13 @@ def lfsr(poly, outputfile):
 			return period
 
 
-def ngram_count(text, ngram_len):
+def ngram_count(text, ngram_len): # How should i count it???
 
 	ngram_count = {}
 
 	for i in range(len(text) - ngram_len + 1):
 
-		ngram = int(text[i : i + ngram_len])
+		ngram = text[i : i + ngram_len]
 
 		try:
 			ngram_count[ngram] += 1
@@ -77,8 +75,14 @@ def autocorrelation(arr, period, d):
 
 def ngram_count_task(text, max_len, filename):
 
-	for i in range(1, max_len + 1):
-		pass
+	with open(filename, 'w', encoding='utf-8') as f:
+
+		for length in range(1, max_len + 1):
+
+			f.write('Ngram length: ' + str(length) + '\n')
+			f.write('Ngrams:\n' + str(ngram_count(text, length)) + '\n\n')
+
+	print('Ngrams count written to ' + filename)
 
 
 def autocorrelation_task(arr, period):
@@ -86,7 +90,7 @@ def autocorrelation_task(arr, period):
 	res = []
 	for d in range(11):
 		res.append(autocorrelation(arr, period, d))
-		print('autocorrelation for d =', d, autocorrelation(arr, period, d))
+		print('autocorrelation for d=' + str(d), autocorrelation(arr, period, d))
 	return res
 
 
@@ -95,15 +99,33 @@ def import_data(filename):
 		return f.read()
 
 
+
 def main():
 
-	#period1 = lfsr(arr1, 'lfsr_result1.txt')
+	period1 = lfsr(arr1, 'LFSR_result1.txt')
 
-	data1 = import_data('lfsr_result1.txt')
+	print(period1)
+
+	data1 = import_data('LFSR_result1.txt')
 
 	#print(ngram_count(data1, 2))
 
 	print(autocorrelation_task(data1, 1398101))#period1))
+	ngram_count_task(data1, len(arr1), 'L1_ngrams.txt')
+
+
+
+	period2 = lfsr(arr2, 'LFSR_result2.txt')
+
+	print(period2)
+
+	data2 = import_data('LFSR_result2.txt')
+
+	#print(ngram_count(data1, 2))
+
+	print(autocorrelation_task(data2, period2))
+	ngram_count_task(data2, len(arr2), 'L2_ngrams.txt')
+
 
 
 main()
