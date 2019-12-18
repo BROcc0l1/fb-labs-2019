@@ -87,6 +87,16 @@ def autocorrelation_task(arr, period):
 	return res
 
 
+def check_poly(period, n, q=2):
+
+	if period == q ** n - 1:
+		print('The polynom is primitive')
+	elif q ** n - 1 % period == 0:
+		print('The polynom is irreducible')
+	else:
+		print('The polynom is reducible')
+
+
 def import_data(filename):
 	with open(filename, 'r', encoding='utf-8') as f:
 		return f.read()
@@ -97,6 +107,8 @@ def main():
 
 	print('\n==== POLYNOM 1 ====\n')
 	period1 = lfsr(p1, 'LFSR_result1.txt')
+
+	check_poly(period1, 22)
 
 	print('Period:', period1)
 
@@ -111,6 +123,8 @@ def main():
 	print('\n==== POLYNOM 2 ====\n')
 
 	period2 = lfsr(p2, 'LFSR_result2.txt')
+
+	check_poly(period2, 21)
 
 	print('Period:', period2)
 
