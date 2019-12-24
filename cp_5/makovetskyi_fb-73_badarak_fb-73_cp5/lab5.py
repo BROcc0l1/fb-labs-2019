@@ -2,6 +2,7 @@ import random
 from math import gcd
 
 
+
 def modular_inverse(a, b):
 
 	x, y = 0, 1
@@ -43,7 +44,6 @@ def prime_by_miller_rabin(p, rounds=1024):
 
 	for pr in primes:
 		if p % pr == 0:
-			print('div')
 			return False
 
 	d = p - 1
@@ -58,7 +58,6 @@ def prime_by_miller_rabin(p, rounds=1024):
 		x = random.randrange(2, p)
 
 		if gcd(x, p) > 1:
-			print('T-1')
 			return False
 
 		x = pow(x, d, p)
@@ -73,7 +72,6 @@ def prime_by_miller_rabin(p, rounds=1024):
 			if xr == p - 1:
 				return True
 			if xr == 1:
-				print('T-2')
 				return False
 
 		if xr != p - 1:
@@ -96,14 +94,14 @@ def create_random_prime(min, max):
 
 	for i in range((max - m0) // 2):
 		p = m0 + 2 * i
-		print(p)
+		#print(p)
 		if prime_by_miller_rabin(p):
 			return p
 		else:
 			return create_random_prime(min, max)
 
 
-def generate_key_pair(p, q):
+def generate_RSA_key_pair(p, q):
 
 	n = p * q
 	eul = (p - 1) * (q - 1)
@@ -119,8 +117,44 @@ def generate_key_pair(p, q):
 	except ValueError as ve:
 		print(ve)
 
+	return d, n, e
 
-		
+
+def RSA_encrypt(message, e, n):
+	return pow(message, e, n)
+
+
+def RSA_decrypt(ciphertext, d, n):
+	return pow(ciphertext, d, n)
+
+
+def RSA_sign(message, d, n):
+	return message, pow(m, d, n)
+
+
+def RSA_validate_signature(msg, sign, e, n):
+	return True if msg == pow(sign, e, n) else False
+
+
+# TODO: Add checking for n1 >= n
+def RSA_send_key(e, n, d, e1, n1, k):
+	
+	k1 = pow(k, e1, n1)
+	s1 = pow(s, e1, n1)
+	s = pow(k, d, n)
+
+	return k1, s1
+
+
+def RSA_get_key(k1, d1, n1, s1, e, n, s):
+
+	k = pow(k1, d1, n1)
+	s = pow(s1, d1, n1)
+	if RSA_validate_signature(k, s, e, n) == False:
+		raise Exception('RSA key not validated!')
+
 
 #print(prime_by_miller_rabin(7571, 128))
-create_random_prime(1, 10000)
+print(create_random_prime(1, 10000))
+
+
