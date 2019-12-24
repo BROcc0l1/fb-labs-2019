@@ -2,6 +2,36 @@ import random
 from math import gcd
 
 
+def modular_inverse(a, b):
+
+	x, y = 0, 1
+	u, v = 1, 0
+	m = b
+	a1 = a
+	b1 = b
+
+	while a != 0:
+
+		q = b // a
+		r = b % a
+
+		m = x - u * q
+		n = y - v * q
+
+		b,a, x,y, u,v = a,r, u,v, m,n
+
+	gcd = b
+
+	if x < 0:
+		x += m
+
+	if gcd == 1:
+		return x
+	else:
+		raise ValueError('Modular inverse for such values does not exist:', a1, b1)
+		#print('Modular inverse for such values does not exist:', a1, 'mod', b1)
+		#return False
+
 
 def prime_by_miller_rabin(p, rounds=1024):
 
@@ -73,6 +103,21 @@ def create_random_prime(min, max):
 			return create_random_prime(min, max)
 
 
+def generate_key_pair(p, q):
+
+	n = p * q
+	eul = (p - 1) * (q - 1)
+
+	e = create_random_prime(2, eul - 1)
+	e = (2 ** 16) + 1
+
+	while gcd(e, eul) != 1:
+		e = create_random_prime(2, eul - 1)
+
+	try:
+		d = modular_inverse(e, eul) % eul
+	except ValueError as ve:
+		print(ve)
 
 
 		
