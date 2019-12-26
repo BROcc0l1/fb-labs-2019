@@ -101,6 +101,10 @@ def create_random_prime(min, max):
 			return create_random_prime(min, max)
 
 
+def create_prime(bit_count):
+	return create_random_prime(2 ** (bit_count - 1), (2 ** bit_count) - 1)
+
+
 def generate_RSA_key_pair(p, q):
 
 	n = p * q
@@ -140,21 +144,51 @@ def RSA_validate_signature(msg, sign, e, n):
 def RSA_send_key(e, n, d, e1, n1, k):
 	
 	k1 = pow(k, e1, n1)
-	s1 = pow(s, e1, n1)
 	s = pow(k, d, n)
+	s1 = pow(s, e1, n1)
 
 	return k1, s1
 
 
-def RSA_get_key(k1, d1, n1, s1, e, n, s):
+def RSA_receive_key(k1, d1, n1, s1, e, n):
 
 	k = pow(k1, d1, n1)
 	s = pow(s1, d1, n1)
+
 	if RSA_validate_signature(k, s, e, n) == False:
 		raise Exception('RSA key not validated!')
 
+	return k
+
 
 #print(prime_by_miller_rabin(7571, 128))
-print(create_random_prime(1, 10000))
+#print(create_random_prime(1, 10000))
+#print(create_prime(256))
 
 
+def main():
+
+	d1, n1, e1 = generate_RSA_key_pair(create_prime(256), create_prime(256))
+	d2, n2, e2 = generate_RSA_key_pair(create_prime(256), create_prime(256))
+	msg = 1337
+
+	print('User 1 private key:\n', d1)
+	print('User 1 public key:')
+	print('n1\n', n1)
+	print('e1\n', e1)
+
+	print('\nUser 2 private key:\n', d2)
+	print('User 2 public key:')
+	print('n2\n', n2)
+	print('e2\n', e2)
+
+	print('\nSent:', msg)
+
+	encr = RSA_encrypt(msg, e1, n1)
+	k1, s1 = RSA_send_key(e1, n1, d1, e2, n2, msg)
+	k = RSA_receive_key(k1, d2, n2, s1, e1, n1)
+
+	print('Received:', k)
+
+
+main()
