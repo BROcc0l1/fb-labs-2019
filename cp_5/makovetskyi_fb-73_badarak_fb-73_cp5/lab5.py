@@ -133,7 +133,7 @@ def RSA_decrypt(ciphertext, d, n):
 
 
 def RSA_sign(message, d, n):
-	return message, pow(m, d, n)
+	return message, pow(message, d, n)
 
 
 def RSA_validate_signature(msg, sign, e, n):
@@ -141,7 +141,7 @@ def RSA_validate_signature(msg, sign, e, n):
 
 
 # TODO: Add checking for n1 >= n
-def RSA_send_key(e, n, d, e1, n1, k):
+def DH_send_key(e, n, d, e1, n1, k):
 	
 	k1 = pow(k, e1, n1)
 	s = pow(k, d, n)
@@ -150,7 +150,7 @@ def RSA_send_key(e, n, d, e1, n1, k):
 	return k1, s1
 
 
-def RSA_receive_key(k1, d1, n1, s1, e, n):
+def DH_receive_key(k1, d1, n1, s1, e, n):
 
 	k = pow(k1, d1, n1)
 	s = pow(s1, d1, n1)
@@ -170,7 +170,7 @@ def main():
 
 	d1, n1, e1 = generate_RSA_key_pair(create_prime(256), create_prime(256))
 	d2, n2, e2 = generate_RSA_key_pair(create_prime(256), create_prime(256))
-	msg = 1337
+	key = 1337
 
 	print('User 1 private key:\n', d1)
 	print('User 1 public key:')
@@ -182,11 +182,16 @@ def main():
 	print('n2\n', n2)
 	print('e2\n', e2)
 
-	print('\nSent:', msg)
+	sign = RSA_sign(key, d1, n1)[1]
+	print('Signature:', sign)
+	print('\nSent:', key)
 
-	encr = RSA_encrypt(msg, e1, n1)
-	k1, s1 = RSA_send_key(e1, n1, d1, e2, n2, msg)
-	k = RSA_receive_key(k1, d2, n2, s1, e1, n1)
+	encr = RSA_encrypt(key, e1, n1)
+	k1, s1 = DH_send_key(e1, n1, d1, e2, n2, key)
+	print('encr key:', k1)
+	print('sign:', s1)
+	k = DH_receive_key(k1, d2, n2, s1, e1, n1)	
+	print(RSA_validate_signature(k, sign, e1, n1))
 
 	print('Received:', k)
 
