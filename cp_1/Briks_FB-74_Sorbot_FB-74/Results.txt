@@ -1,0 +1,41 @@
+========================================================================================================================
+
+Entropy
+
+========================================================================================================================
+
+Entropy for monograms with spaces
+4.37484734779705
+
+Redundancy:
+0.1250305304405901
+
+Entropy for monograms without spaces
+4.456188070807488
+
+Redundancy:
+0.1087623858385024
+
+Entropy for non-intersectings bigrams with spaces
+3.9744422463122078
+
+Redundancy:
+0.2051115507375585
+
+Entropy for non-intersectings bigrams without spaces
+4.139378363208348
+
+Redundancy:
+0.1721243273583305
+
+Entropy for intersectings bigrams with spaces
+3.9748639278536744
+
+Redundancy:
+0.20502721442926508
+
+Entropy for intersectings bigrams without spaces
+4.140236370129598
+
+Redundancy:
+0.1719527259740804
